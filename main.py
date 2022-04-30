@@ -9,8 +9,8 @@ def get_data(data):
     df = data.fetch_data_from_table("BINANCE_BTCUSDT_4h")
     df.set_index('datetime', inplace=True)
     df.index = pd.to_datetime(df.index)
-    print(df.head())
-    print(df.tail())
+    #print(df.head())
+    #print(df.tail())
     return df
 
 
@@ -19,12 +19,12 @@ def main():
     df = get_data(data)
     # shift time series data before dividing data
     df_shifted = data.shift(df.copy(), 1)
-    # divide data for feeding models
+    #scale data before dividing
     df_scaled = data.minmax_scale(df_shifted.copy())
+    #df_scaled = data.normalize(df_shifted.copy())
+    # dividing data to feed models
     input_test, input_train, output_test, output_train = data.get_data_partitions(df_scaled.copy(), shifted=True)
-    # scale data
-    # input_test_scaled, input_train_scaled, output_test_scaled, output_train_scaled = data.scale_data_partitions(
-    #   input_test, input_train, output_test, output_train)
+
 
     # train models and  collect result metrics
 
@@ -41,10 +41,17 @@ def main():
     scores=[]
     for model in models:
         y_hat = model.predict(input_test.to_numpy()).reshape(-1, 1)
+
         y_hat_not_scaled = data.minmax_scale_inverse(pd.DataFrame(y_hat), df_shifted["shifted"].min(),
                                                      df_shifted["shifted"].max()).to_numpy()
         y_true_not_scaled = data.minmax_scale_inverse(output_test, df_shifted["shifted"].min(),
                                                       df_shifted["shifted"].max()).to_numpy()
+        """
+        y_hat_not_scaled = data.denormalize(pd.DataFrame(y_hat), df_shifted["shifted"].mean(),
+                                                     df_shifted["shifted"].std()).to_numpy()
+        y_true_not_scaled = data.denormalize(output_test, df_shifted["shifted"].mean(),
+                                                      df_shifted["shifted"].std()).to_numpy()
+        """
         for score in  ML_Engine.write_scores(model, y_hat_not_scaled, y_true_not_scaled):
             scores.append(score)
 
@@ -62,7 +69,7 @@ def main():
         y_true_not_scaled = data.minmax_scale_inverse(output_test, df_shifted["shifted"].min(),
                                                     df_shifted["shifted"].max()).to_numpy()
 
-        ML_Engine.plot_scores(y_hat_not_scaled,y_true_not_scaled)
+        #ML_Engine.plot_scores(y_hat_not_scaled,y_true_not_scaled)
 
 
 if __name__ == '__main__':

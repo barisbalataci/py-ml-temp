@@ -30,7 +30,7 @@ class Regressor:
         return model
 
     def svm(self, input, output):
-        model = svm.SVR(C=50, gamma=0.001, epsilon=0.2)
+        model = svm.SVR(C=50, gamma=0.001, epsilon=0.05)
         model.fit(input, output)
         return model
 
@@ -40,7 +40,7 @@ class Regressor:
         return model
 
     def random_forest(self, input, output):
-        model = RandomForestRegressor(200, max_features='sqrt', max_depth=11)
+        model = RandomForestRegressor(100, max_features='sqrt', max_depth=5)
         model.fit(input, output)
         return model
 
@@ -60,7 +60,7 @@ class Regressor:
         return model
 
     def multi_layer_perceptron(self, input, output):
-        model = MLPRegressor(hidden_layer_sizes=(5), alpha=.001, activation='tanh', solver='lbfgs')
+        model = MLPRegressor(hidden_layer_sizes=(100), alpha=.001, activation='relu', solver='lbfgs')
         model.fit(input, output)
         return model
 

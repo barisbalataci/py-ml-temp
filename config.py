@@ -9,4 +9,4 @@ class Config:
     output = 'close'
     shifted='shifted'
     # regressors=["linear","ridge","svm","var","multi_layer_perceptron","naive_bayes","k_nearest_neigbor","random_forest","decision_tree","logistic"]
-    regressors = ["linear", "ridge","multi_layer_perceptron"]
+    regressors = ["linear", "ridge","multi_layer_perceptron","svm"]

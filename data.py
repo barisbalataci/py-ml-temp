@@ -90,9 +90,6 @@ class Data:
     def scale_inverse(self, values):
         return self.scaler.inverse_transform(values)
 
-    def scale_data_partitions(self,input_test,input_train,output_test,output_train):
-        return self.scale(input_test.values), self.scale(input_train.values), self.scale(output_test.values.reshape(-1, 1)), self.scale(
-            output_train.values.reshape(-1, 1))
 
     def shift(self, data, n):
         data[self.cfg.shifted] = data[self.cfg.output].shift(n)
