@@ -20,7 +20,7 @@ class Regressor:
         return model
 
     def ridge(self, input, output):
-        model = linear_model.Ridge(alpha=10)
+        model = linear_model.Ridge(alpha=5)
         model.fit(input, output)
         return model
 
@@ -30,7 +30,7 @@ class Regressor:
         return model
 
     def svm(self, input, output):
-        model = svm.SVR(C=50, gamma=0.001, epsilon=0.05)
+        model = svm.SVR(C=50, gamma=0.001, epsilon=0.01)
         model.fit(input, output)
         return model
 
@@ -60,7 +60,7 @@ class Regressor:
         return model
 
     def multi_layer_perceptron(self, input, output):
-        model = MLPRegressor(hidden_layer_sizes=(100), alpha=.001, activation='relu', solver='lbfgs')
+        model = MLPRegressor(hidden_layer_sizes=(100), alpha=.001, activation='tanh', solver='lbfgs')
         model.fit(input, output)
         return model
 
