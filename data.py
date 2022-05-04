@@ -14,7 +14,7 @@ class Data:
 
     def __init__(self) -> None:
         self.cfg = Config()
-        scaler = MinMaxScaler(feature_range=(0, 1))
+        #scaler = MinMaxScaler(feature_range=(0, 1))
 
     def get_timestamp_ms(self, start_date):
         startDate = datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
@@ -82,14 +82,14 @@ class Data:
     def fetch_data_from_csv(self, file):
         path = f"./data/{file}"
         return pd.read_csv(path)
-
-    def scale(self, values):
+    """
+        def scale(self, values):
         scaled = self.scaler.fit_transform(values)
         return scaled
 
-    def scale_inverse(self, values):
+        def scale_inverse(self, values):
         return self.scaler.inverse_transform(values)
-
+    """
 
     def shift(self, data, n):
         data[self.cfg.shifted] = data[self.cfg.output].shift(n)
@@ -111,12 +111,25 @@ class Data:
     def normalize(self,df:pd.DataFrame):
         return (df - df.mean()) / df.std()
 
-
     def denormalize(self, df_norm:pd.DataFrame, mean, std):
         return (df_norm*std)+mean
 
     def minmax_scale(self, df: pd.DataFrame):
         return (df - df.min()) / (df.max() - df.min())
 
+
     def minmax_scale_inverse(self, df_scaled: pd.DataFrame,min,max):
         return ((df_scaled *(max-min))+ min )
+
+    def scale(self, df:pd.DataFrame):
+        if self.cfg.scaler == "standard":
+            self.normalize(df)
+        else:
+            self.denormalize(df)
+
+
+    def inverse_scale(self, df:pd.DataFrame,mean,std):
+        if self.cfg.scaler == "standard":
+            self.denormalize(df,mean,std)
+        else:
+            self.minmax_scale_inverse(df,min,max)

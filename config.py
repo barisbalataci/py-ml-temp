@@ -7,6 +7,7 @@ class Config:
     columns = ['datetime', 'open', 'high', 'low', 'close', 'volume']
     inputs = ['open', 'high', 'low', 'close', 'volume']
     output = 'close'
-    shifted='shifted'
+    shifted = 'shifted'
     # regressors=["linear","ridge","svm","var","multi_layer_perceptron","naive_bayes","k_nearest_neigbor","random_forest","decision_tree","logistic"]
-    regressors = ["linear", "ridge","multi_layer_perceptron","svm"]
+    regressors = ["linear", "ridge", "multi_layer_perceptron", "svm"]
+    scaler = 'stardard'  # standart or minmax
